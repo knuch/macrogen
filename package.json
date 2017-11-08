@@ -1,0 +1,23 @@
+{
+  "name": "af",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/knuch/af.git",
+  "author": "knuch <knuchelf@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mobx": "^3.3.1",
+    "mobx-react": "^4.3.3",
+    "moment": "^2.19.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-scripts": "1.0.14"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "deploy": "react-scripts build && git subtree push --prefix build origin gh-pages"
+  }
+}
