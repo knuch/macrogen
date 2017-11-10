@@ -1,5 +1,4 @@
 import {extendObservable, action, computed} from 'mobx';
-import moment from 'moment';
 
 export default class Generator {
 
@@ -23,7 +22,7 @@ export default class Generator {
           cs: '',
           cf: '',
           modifs: [],
-          bonus: 0
+          bonus: ''
         }
       }
       this.groups.push(group);

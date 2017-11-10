@@ -1,3 +1,23 @@
 textarea {
   min-height: 500px;
 }
+
+.textarea-zone {
+  position: relative;
+  height: 500px;
+}
+
+.clipboard-alert {
+  position: fixed;
+  bottom: 0;
+  left: 2.5%;
+  width: 95%;
+}
+
+.check {
+  position: absolute;
+  top: 40%;
+  left: 37%;;
+  font-size: 4em;
+  display: inline-block;
+}
