@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import config from './config/config.json';
+import config from '../config/config.json';
 
 export default class Firebase {
   constructor() {
