@@ -5,10 +5,17 @@ import './App.css';
 import RollGroup from './rollGroup';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import FontAwesome from 'react-fontawesome';
+import Firebase from './firebase'
 
 class App extends Component {
-  state = {
-    macroCopied: false
+
+  constructor(props) {
+    super(props);
+    const firebase = new Firebase();
+    this.state = {
+      db: firebase,
+      macroCopied: false,
+    }
   }
 
   render() {
@@ -17,6 +24,8 @@ class App extends Component {
     return (
       <div className="container">
         <div className="row h-100 text-center pt-5">
+          <div className="col-12">
+          </div>
           <div className="col-8 d-none d-md-block"></div>
           <div className="col-md-8 text-left">
             <div className="controls row">
@@ -38,18 +47,18 @@ class App extends Component {
             <div className="clipboard-alert">
               { this.state.macroCopied ?
                 <h4 className="alert alert-success mt-3"><FontAwesome name='check-circle-o' /> This macro has been copied to your clipboard</h4>
-              :
+                :
                 null
               }
             </div>
-              {
-                this.state.macroCopied
-                ?
-                <div className="check txt-primary alert alert-success">
-                  <FontAwesome name='check' />
-                </div>
-                : null
-              }
+            {
+              this.state.macroCopied
+              ?
+              <div className="check txt-primary alert alert-success">
+                <FontAwesome name='check' />
+              </div>
+              : null
+            }
             <CopyToClipboard text={generator.macro}
               onCopy={() => this.setState({macroCopied: true})}>
               <textarea className="form-control" value={generator.macro} readOnly>
