@@ -20,4 +20,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-./src/config/config.json
+/src/config/config.json
