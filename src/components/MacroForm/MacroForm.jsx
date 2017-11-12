@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import FontAwesome from 'react-fontawesome';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import Firebase from '../../stores/firebase';
 import { observe } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import RollGroup from '../RollGroup';
@@ -9,14 +8,12 @@ import RollGroup from '../RollGroup';
 class MacroForm extends Component {
   constructor() {
     super();
-    const firebase = new Firebase();
     this.state = {
-      db: firebase,
       macroCopied: false,
     }
   }
   render() {
-    const { app } = this.props;
+    const { app, fb } = this.props;
     observe(app.macro, () => { this.setState({macroCopied: false}) });
     return (
       <div className="container">
@@ -68,4 +65,4 @@ class MacroForm extends Component {
   }
 }
 
-export default inject('app')(observer(MacroForm));
+export default inject('app', 'fb')(observer(MacroForm));

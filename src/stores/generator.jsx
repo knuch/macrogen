@@ -1,15 +1,30 @@
-import {extendObservable, action, computed} from 'mobx';
+import {extendObservable, observable, action, observe, computed, autorun, toJS} from 'mobx';
 
 export default class Generator {
 
-  constructor() {
+  constructor(firebase) {
+    this.fb = firebase;
     extendObservable(this, {
+      user: null,
+      loggedin: false,
       groups: [],
       template: 'default',
       name: ''
     });
 
+    this.setLoggedIn = action(val => this.loggedin = val);
+
+    this.UserLoggedIn = action(user => {
+      this.user = user;
+      this.fb.userRef.once('value').then( snap => {
+          this.groups = snap.child('groups').val() || [];
+          this.loggedin = true;
+        }
+      );
+    });
+
     this.addGroup = action(() => {
+      console.log(this);
       const index = this.groups.length+1;
       const group = {
         id: index,
@@ -26,6 +41,10 @@ export default class Generator {
         }
       }
       this.groups.push(group);
+    });
+
+    this.saveGroups = action( () => {
+      console.log(this.groups);
     });
 
     this.setGroupType = action((e, group) => {
@@ -65,27 +84,9 @@ export default class Generator {
       }
     });
 
-    const probe = {
-      template: 'default',
-      inputs: [
-        {
-          type: 'roll',
-          dice: '1d20',
-          cf: '<4',
-          cs: '>17',
-          mods: [
-            {
-              operation: '+',
-              value: 'STR'
-            }
-          ]
-        },
-        {
-          type: 'text',
-          value: ' for '
-        }
-      ]
-    }
+    autorun(() => {
+      const json = JSON.stringify(toJS(this.groups));
+      this.loggedin ? this.fb.saveGroups(this.groups.peek()) : null;
+    });
   }
-
 }

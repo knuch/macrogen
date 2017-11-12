@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import './App.css';
 import Header from './components/Header';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 import MacroForm from './components/MacroForm';
 import Login from './components/Login';
+import { observer, inject } from 'mobx-react'
 
-export default class App extends Component {
+const history = new createBrowserHistory();
+
+class App extends Component {
   render() {
-    const { app } = this.props
+    const { app } = this.props;
     return (
-        <BrowserRouter>
+        <Router history={history}>
           <div className="app">
             <Header />
               {
@@ -23,9 +27,10 @@ export default class App extends Component {
                     <Login />
                   </div>
               }
-
           </div>
-        </BrowserRouter>
+        </Router>
     );
   }
 };
+
+export default inject('app')(observer(App));

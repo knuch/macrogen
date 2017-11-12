@@ -6,10 +6,12 @@ import registerServiceWorker from './registerServiceWorker';
 import {Provider} from 'mobx-react';
 import Generator from './stores/generator';
 import Translations from './stores/translations';
+import Firebase from './stores/firebase';
 
-const generator = new Generator();
+const firebase = new Firebase(Translations.getLanguage());
+const generator = new Generator(firebase);
 ReactDOM.render(
-  <Provider app={generator} s={Translations} >
+  <Provider app={generator} fb={firebase} s={Translations} >
     <App app={generator} />
   </Provider>, document.getElementById('root'));
 registerServiceWorker();
