@@ -4,14 +4,16 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {Provider} from 'mobx-react';
-import Generator from './stores/generator';
+import AppStore from './stores/appstore';
 import Translations from './stores/translations';
 import Firebase from './stores/firebase';
+import { createBrowserHistory } from 'history';
 
-const firebase = new Firebase(Translations.getLanguage());
-const generator = new Generator(firebase);
+const history = new createBrowserHistory();
+const firebaseClass = new Firebase();
+const appstore = new AppStore(firebaseClass, history);
 ReactDOM.render(
-  <Provider app={generator} fb={firebase} s={Translations} >
-    <App app={generator} />
+  <Provider app={appstore} fb={firebaseClass} s={Translations} >
+    <App app={appstore} history={history} />
   </Provider>, document.getElementById('root'));
 registerServiceWorker();

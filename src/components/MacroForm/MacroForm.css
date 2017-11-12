@@ -1,0 +1,8 @@
+textarea {
+  min-height: 100px;
+}
+
+.textarea-zone {
+  position: relative;
+  height: 100px;
+}

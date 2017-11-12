@@ -1,32 +1,30 @@
 import React, { Component } from 'react';
 import './App.css';
 import Header from './components/Header';
-import { Router, Route } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+import { Router, Route, Switch } from 'react-router-dom';
 import MacroForm from './components/MacroForm';
 import Login from './components/Login';
-import { observer, inject } from 'mobx-react'
-
-const history = new createBrowserHistory();
+import { observer, inject } from 'mobx-react';
+import About from './components/About';
+import NotFound from './components/NotFound'
+import AlertManager from './components/AlertManager'
 
 class App extends Component {
   render() {
-    const { app } = this.props;
+    const { app, history } = this.props;
     return (
         <Router history={history}>
           <div className="app">
             <Header />
-              {
-                app.loggedin
-                ?
-                  <div className="container-fluid">
-                    <Route path='/' component={MacroForm}/>
-                  </div>
-                :
-                  <div className="container-fluid pt-5">
-                    <Login />
-                  </div>
-              }
+            <AlertManager />
+            <div className="container-fluid pt-5">
+              <Switch>
+                <Route exact path='/generator' component={MacroForm}/>
+                <Route exact path='/about' component={About}/>
+                <Route exact path='/' component={Login}/>
+                <Route path='/' component={NotFound}/>
+              </Switch>
+            </div>
           </div>
         </Router>
     );

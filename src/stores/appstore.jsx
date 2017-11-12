@@ -1,26 +1,56 @@
 import {extendObservable, observable, action, observe, computed, autorun, toJS} from 'mobx';
+import firebase from 'firebase';
 
-export default class Generator {
+export default class AppStore {
 
-  constructor(firebase) {
-    this.fb = firebase;
+  constructor(firebaseClass, history) {
+    this.fb = firebaseClass;
+    this.history = history;
     extendObservable(this, {
       user: null,
       loggedin: false,
       groups: [],
       template: 'default',
-      name: ''
+      name: '',
+      alerts: [],
+      currentLocation: history.location.pathname
     });
 
-    this.setLoggedIn = action(val => this.loggedin = val);
+    this.history.listen(location => {
+      this.setLocation(location.pathname);
+    })
 
-    this.UserLoggedIn = action(user => {
-      this.user = user;
-      this.fb.userRef.once('value').then( snap => {
-          this.groups = snap.child('groups').val() || [];
-          this.loggedin = true;
-        }
-      );
+    this.setLocation = action(path => this.currentLocation = path);
+
+    this.successLogin = action((user) => {
+      const uid = user.uid;
+      this.fb.setUserDatabase(uid).then(() => {
+        this.user = user;
+        this.fb.userRef.once('value').then( snap => {
+            this.groups = snap.child('groups').val() || [];
+            this.loggedin = true;
+            this.history.push('/generator');
+          }
+        );
+      });
+    });
+
+    this.handleLogout = action(() => {
+      firebase.auth().signOut()
+      .then(() => {
+        this.loggedin = false;
+        this.history.push('/')
+      })
+      .catch(error => {
+
+      });
+    });
+
+    this.handleGoogleLogin = action((user) => {
+      firebase.auth().signInWithPopup(this.fb.googleAuth)
+      .then(res => {
+        this.successLogin(res.user);
+      });
     });
 
     this.addGroup = action(() => {
@@ -41,6 +71,20 @@ export default class Generator {
         }
       }
       this.groups.push(group);
+    });
+
+    this.handleRegister = action(credentials => {
+      return new Promise((resolve, reject) => {
+        console.log(firebase);
+        firebase.auth().createUserWithEmailAndPassword(credentials.login, credentials.pwd)
+        .then(user => {
+          console.log(user);
+            this.successLogin(user);
+        })
+        .catch(error => {
+          reject(error);
+        });
+      });
     });
 
     this.saveGroups = action( () => {

@@ -1,0 +1,14 @@
+.navbar {
+  padding-left: 2.4rem;
+  padding-right: 2.4rem;
+}
+
+.github {
+  padding-top: 0.2rem;
+  padding-bottom: 0rem;
+}
+
+.github .fa {
+  font-size: 1.9rem;
+  padding: 0;
+}
