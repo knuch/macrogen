@@ -1,4 +1,4 @@
-import {extendObservable, observable, action, observe, computed, autorun, toJS} from 'mobx';
+import {extendObservable, action, computed, autorun} from 'mobx';
 import firebase from 'firebase';
 
 export default class AppStore {
@@ -163,7 +163,6 @@ export default class AppStore {
 
 
     this.macro = computed (() => {
-      const reference = "&{template:default}{{name=bite}}{{hit [[1d20cs>5+15]] for [[1d8cf<3+7+[STR]?{Damage Bonus?|0}[Misc. Bonus]]] dmg }}{{Fort DC21 for [[1d3]] STR dmg}}";
       const macroHead = `&{template:${this.template}}{{name=${this.name}}}`;
       const macroBody = this.groups.map(g => {
         const a = g.args;
@@ -178,7 +177,6 @@ export default class AppStore {
     });
 
     autorun(() => {
-      const json = JSON.stringify(toJS(this.groups));
       this.loggedin ? this.fb.saveGroups(this.groups.peek()) : null;
     });
   }

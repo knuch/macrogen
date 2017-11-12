@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {observer, inject} from 'mobx-react';
+import {observer} from 'mobx-react';
 
 class RollGroup extends Component {
   render() {

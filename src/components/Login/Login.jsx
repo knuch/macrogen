@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import FontAwesome from 'react-fontawesome';
-import firebase from 'firebase';
 import { Link } from 'react-router-dom';
 
 class Login extends Component {
@@ -54,14 +53,14 @@ class Login extends Component {
   }
 
   render() {
-    const { s, fb, app } = this.props;
+    const { s, app } = this.props;
     return(
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-8">
             <div className="jumbotron py-4">
               <h1 className="display-3">{s.home.title}</h1>
-              <h1> 🎲 🖥 ⚔️ 🐲 </h1>
+              <h1> <span role='img'>🎲 🖥 ⚔️ 🐲</span> </h1>
               {
                 s.getLanguage() === 'fr'
                 ?
@@ -73,10 +72,17 @@ class Login extends Component {
                   <p className="lead">Macrogen is a tool that allows you to <b>create, generate and save</b> your <b>macros</b> for the <b>Roll20</b> platform (<a href="https://roll20.net" target="_blank">Official website</a>). Friends of online roleplaying, This tool will ease your life and make it a breeze to manage your NPCs and PCs Marcos! Please enjoy using the tool, GM and Players alltogether!</p>
                 </span>
               }
-              <hr className="my-4" />
-              <p>{s.home.subtext}</p>
-              <p>{s.home.or_try} <Link className="btn btn-primary ml-1" to="/generator" role="button">{s.home.no_account}</Link></p>
-              <hr/>
+              {
+                app.loggedin
+                ? null
+                :
+                <div>
+                  <hr className="my-4" />
+                  <p>{s.home.subtext}</p>
+                  <p>{s.home.or_try} <Link className="btn btn-primary ml-1" to="/generator" role="button">{s.home.no_account}</Link></p>
+                  <hr/>
+                </div>
+              }
               <p className="lead">{s.home.happy_gaming}</p>
             </div>
           </div>
@@ -124,4 +130,4 @@ class Login extends Component {
   }
 }
 
-export default inject('s', 'app', 'fb')(observer(Login));
+export default inject('s', 'app')(observer(Login));

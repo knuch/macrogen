@@ -21,13 +21,13 @@ class Header extends Component {
             <li className={app.currentLocation === '/generator' ? 'nav-item active' : 'nav-item'}>
               <Link className="nav-link" to='/generator'>{s.menu.generator}</Link>
             </li>
-            <li className={app.currentLocation === '/about' ? 'nav-item active' : 'nav-item'}>
+            {/* <li className={app.currentLocation === '/about' ? 'nav-item active' : 'nav-item'}>
               <Link className="nav-link" to='/about'>{s.menu.about}</Link>
-            </li>
+            </li> */}
           </ul>
           <span className="navbar-text">
-              <a href="https://github.com/knuch/macrogen" target="_blank" className="github btn btn-secondary mr-2"><FontAwesome name="github" /></a>
-              <a href="https://www.paypal.me/knuch/" target="_blank" className="btn btn-primary"><FontAwesome name="paypal" /> {s.menu.donate}</a>
+              <a href="https://github.com/knuch/macrogen" target="_blank" rel="noopener noreferrer" className="github btn btn-secondary mr-2"><FontAwesome name="github" /></a>
+              <a href="https://www.paypal.me/knuch/" target="_blank" rel="noopener noreferrer" className="btn btn-primary"><FontAwesome name="paypal" /> {s.menu.donate}</a>
           </span>
         </div>
       </nav>

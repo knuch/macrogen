@@ -12,8 +12,6 @@ class AlertManager extends Component {
         { renderedAlerts }
       </div>
     );
-
-    return null;
   }
 }
 
