@@ -9,7 +9,13 @@ import trans from './stores/translations';
 import Firebase from './stores/firebase';
 import { createBrowserHistory } from 'history';
 
-const history = new createBrowserHistory();
+const pathname = window.location.pathname;
+let basename = false;
+if (pathname.indexOf('macrogen') >= 0) basename = '/macrogen';
+
+const history = new createBrowserHistory({
+  basename: basename
+});
 const firebaseClass = new Firebase();
 const appstore = new AppStore(firebaseClass, history, trans);
 ReactDOM.render(
