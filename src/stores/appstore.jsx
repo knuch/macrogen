@@ -3,9 +3,10 @@ import firebase from 'firebase';
 
 export default class AppStore {
 
-  constructor(firebaseClass, history) {
+  constructor(firebaseClass, history, trans) {
     this.fb = firebaseClass;
     this.history = history;
+    this.s = trans;
     extendObservable(this, {
       user: null,
       loggedin: false,
@@ -13,36 +14,52 @@ export default class AppStore {
       template: 'default',
       name: '',
       alerts: [],
-      currentLocation: history.location.pathname
+      currentLocation: history.location.pathname,
+      loading: true
     });
 
     this.history.listen(location => {
       this.setLocation(location.pathname);
+      this.clearAlerts();
     })
 
     this.setLocation = action(path => this.currentLocation = path);
 
-    this.successLogin = action((user) => {
+    this.setLoading = action(bool => this.loading = bool);
+
+    this.successLogin = action((user, redirect = true, showAlert = true) => {
       const uid = user.uid;
       this.fb.setUserDatabase(uid).then(() => {
         this.user = user;
         this.fb.userRef.once('value').then( snap => {
             this.groups = snap.child('groups').val() || [];
             this.loggedin = true;
-            this.history.push('/generator');
+            this.setLoading(false);
+            if (redirect) this.history.push('/generator');
+            if (showAlert) this.addSuccess(`${this.s.alert.success_login} ${this.user.email}`, 'check');
           }
         );
       });
     });
+
+    this.alreadyLoggedIn = action( () => {
+      // AUTO-LOGIN
+      // if th euser is connected on firebase, automatically update frontend
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.successLogin(user, false, false);
+        } else {
+          this.setLoading(false);
+        }
+      });
+    });
+    this.alreadyLoggedIn();
 
     this.handleLogout = action(() => {
       firebase.auth().signOut()
       .then(() => {
         this.loggedin = false;
         this.history.push('/')
-      })
-      .catch(error => {
-
       });
     });
 
@@ -54,7 +71,6 @@ export default class AppStore {
     });
 
     this.addGroup = action(() => {
-      console.log(this);
       const index = this.groups.length+1;
       const group = {
         id: index,
@@ -73,22 +89,20 @@ export default class AppStore {
       this.groups.push(group);
     });
 
+    this.handleClassicLogin = action(credentials => {
+      return new Promise((resolve, reject) => {
+        firebase.auth().signInWithEmailAndPassword(credentials.login, credentials.pwd)
+        .then(user => this.successLogin(user))
+        .catch(error =>reject(error));
+    });
+  });
+
     this.handleRegister = action(credentials => {
       return new Promise((resolve, reject) => {
-        console.log(firebase);
         firebase.auth().createUserWithEmailAndPassword(credentials.login, credentials.pwd)
-        .then(user => {
-          console.log(user);
-            this.successLogin(user);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        .then(user => this.successLogin(user))
+        .catch(error =>reject(error));
       });
-    });
-
-    this.saveGroups = action( () => {
-      console.log(this.groups);
     });
 
     this.setGroupType = action((e, group) => {
@@ -112,6 +126,41 @@ export default class AppStore {
     this.findGroup = action(id => {
       return this.groups.find(current => current.id === id );
     });
+
+    this.clearAlerts = action('clearAlerts', () => new Promise( resolve => {
+        this.alerts = [];
+        resolve();
+      })
+    );
+
+    this.addDanger = action('addDangerAlert', (text, icon = false) => {
+      this.clearAlerts()
+      .then(() => {
+        this.alerts.push({ type:'danger', msg:text, icon: icon });
+      })
+    });
+
+    this.addWarning = action('addWarningAlert', (text, icon = false) => {
+      this.clearAlerts()
+      .then(() => {
+        this.alerts.push({ type:'warning', msg:text, icon: icon });
+      })
+    });
+
+    this.addInfo = action('addInfoAlert', (text, icon = false) => {
+      this.clearAlerts()
+      .then(() => {
+        this.alerts.push({ type:'info', msg:text, icon: icon });
+      })
+    });
+
+    this.addSuccess = action('addSuccessAlert', (text, icon = false) => {
+      this.clearAlerts()
+      .then(() => {
+        this.alerts.push({ type:'success', msg:text, icon: icon });
+      })
+    });
+
 
     this.macro = computed (() => {
       const reference = "&{template:default}{{name=bite}}{{hit [[1d20cs>5+15]] for [[1d8cf<3+7+[STR]?{Damage Bonus?|0}[Misc. Bonus]]] dmg }}{{Fort DC21 for [[1d3]] STR dmg}}";

@@ -14,16 +14,25 @@ class MacroForm extends Component {
       macroCopied: false,
     }
   }
+
+  componentWillMount() {
+    // reset state of macrocopied when something is changed in the macro
+    // test not to reset when macroCopied is already false
+    observe(this.props.app.macro, () => {
+    if(this.state.macroCopied) {
+      this.setState({macroCopied: false})
+    } });
+  }
+
   render() {
     const { app, s } = this.props;
-    observe(app.macro, () => { this.setState({macroCopied: false}) });
     return (
       <div className="container-fluid">
         <div className="row h-100 text-center">
           {
             app.loggedin ? null :
             <div className="col-12">
-              <div className="alert alert-warning alert-dismissible fade show" role="alert"><FontAwesome name="user-times fa-lg"/> {s.generator.logged_out} <Link to="/" className="btn btn-info"><FontAwesome name="sign-in" /> {s.generator.connect}</Link>
+              <div className="alert alert-warning alert-dismissible fade show mb-4" role="alert"><FontAwesome name="user-times fa-lg"/> {s.generator.logged_out} <Link to="/" className="btn btn-info"><FontAwesome name="sign-in" /> {s.generator.connect}</Link>
               <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>

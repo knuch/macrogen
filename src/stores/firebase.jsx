@@ -14,14 +14,14 @@ export default class Firebase {
     return new Promise((resolve) => {
       const userRef = this.ref.child('users').child(uid);
       userRef.once('value', snap => {
-          if (snap.exists()) {
-            this.userRef = userRef;
-            resolve();
-          } else {
-              userRef.set({groups:[]});
-              this.userRef = userRef;
-              resolve();
-          }
+        if (snap.exists()) {
+          this.userRef = userRef;
+          resolve();
+        } else {
+          userRef.set({groups:[]});
+          this.userRef = userRef;
+          resolve();
+        }
       });
     });
   }

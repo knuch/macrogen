@@ -1,8 +1,12 @@
 import LocalizedStrings from 'react-localization';
 
-let Translations = new LocalizedStrings({
+let trans = new LocalizedStrings({
   fr: {
     brand: 'Macrogen',
+    loading: 'Chargement...',
+    alert: {
+      success_login: 'Connexion réussie. Bienvenue'
+    },
     login: {
       title: 'Login',
       username: 'Nom d\'utilisateur',
@@ -52,4 +56,4 @@ let Translations = new LocalizedStrings({
   }
 });
 
-export default Translations;
+export default trans;

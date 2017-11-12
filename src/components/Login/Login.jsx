@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import FontAwesome from 'react-fontawesome';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
@@ -33,7 +33,12 @@ class Login extends Component {
   }
 
   handleClassicLogin() {
-    // TODO: handle login
+    this.props.app.handleClassicLogin(this.state)
+    .catch(error => {
+      this.setState({
+        error: error
+      });
+    });
   }
 
   handleLoginChange(e) {
@@ -119,4 +124,4 @@ class Login extends Component {
   }
 }
 
-export default inject('s', 'app', 'fb')(Login);
+export default inject('s', 'app', 'fb')(observer(Login));
