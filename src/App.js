@@ -12,12 +12,18 @@ export default class App extends Component {
         <BrowserRouter>
           <div className="app">
             <Header />
-            { app.loggedin
-            ? 'Loggedin'
-            : <Login />
-          }
-            <Route path='/a' exact component={Header}/>
-            <Route path='/' component={MacroForm}/>
+              {
+                app.loggedin
+                ?
+                  <div className="container-fluid">
+                    <Route path='/' component={MacroForm}/>
+                  </div>
+                :
+                  <div className="container-fluid pt-5">
+                    <Login />
+                  </div>
+              }
+
           </div>
         </BrowserRouter>
     );
