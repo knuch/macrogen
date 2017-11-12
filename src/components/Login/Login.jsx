@@ -65,11 +65,11 @@ class Login extends Component {
                 s.getLanguage() === 'fr'
                 ?
                 <span>
-                  <p className="lead">Macrogen est un outil qui te permettra de <b>créer et sauvegarder</b> tes <b>macros</b> pour la plateforme <b>Roll20</b> (<a href="https://roll20.net" target="_blank">Site officiel</a>). MJ ou joueur, créer des macros pour tes personnages favoris n'aura jamais été aussi simple!</p>
+                  <p className="lead">Macrogen est un outil qui te permettra de <b>créer et sauvegarder</b> tes <b>macros</b> pour la plateforme <b>Roll20</b> (<a href="https://roll20.net" target="_blank" rel="noopener noreferrer">Site officiel</a>). MJ ou joueur, créer des macros pour tes personnages favoris n'aura jamais été aussi simple!</p>
                 </span>
                 :
                 <span>
-                  <p className="lead">Macrogen is a tool that allows you to <b>create, generate and save</b> your <b>macros</b> for the <b>Roll20</b> platform (<a href="https://roll20.net" target="_blank">Official website</a>). Friends of online roleplaying, This tool will ease your life and make it a breeze to manage your NPCs and PCs Marcos! Please enjoy using the tool, GM and Players alltogether!</p>
+                  <p className="lead">Macrogen is a tool that allows you to <b>create, generate and save</b> your <b>macros</b> for the <b>Roll20</b> platform (<a href="https://roll20.net" target="_blank" rel="noopener noreferrer">Official website</a>). Friends of online roleplaying, This tool will ease your life and make it a breeze to manage your NPCs and PCs Marcos! Please enjoy using the tool, GM and Players alltogether!</p>
                 </span>
               }
               {
