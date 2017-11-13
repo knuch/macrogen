@@ -8,10 +8,6 @@ class RollGroup extends Component {
     return (
       <fieldset className="form-group row col-12">
         <hr/>
-        {/* <select onChange={(e) => app.setGroupType(e, group)} className="form-control mb-2" name="asdf" id="asdf" value={group.type}>
-        <option value="text">text</option>
-        <option value="roll">roll</option>
-      </select> */}
       { group.type === 'roll'
       ?
       <div className="row">

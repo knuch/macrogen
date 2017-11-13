@@ -37,11 +37,30 @@ let trans = new LocalizedStrings({
       logged_out: 'Vous êtes déconnecté. Pour sauvegarder vos macro, veuillez vous',
       connect: 'connecter',
       copied: 'Macro copiée dans le presse-papier',
-      copy: 'Copier'
+      copy: 'Copier',
+      empty: 'Vide'
     },
     form: {
-      template: 'Template',
-      title: 'Titre'
+      template: 'Template de votre macro',
+      title: 'Titre de la macro',
+      parameters: 'Paramètre généraux',
+      addLine: 'Ajouter une ligne à la macro',
+      add_entry_text: 'Ajouter du texte',
+      add_entry_roll: 'Ajouter du lancé de dé',
+      line: 'Ligne',
+      text: 'Texte',
+      text_placeholder: 'Texte de la macro',
+      roll: 'Lancer de dés',
+      value: 'valeur',
+      value_placeholder: 'valeur',
+      dice: 'Dé',
+      dice_placeholder: 'Dé à lancer',
+      bonus: 'Bonus',
+      bonus_placeholder: 'bonus (12, STR)',
+      cs: 'Crit',
+      cs_placeholder: 'seuil de critique',
+      cf: 'Fumble',
+      cf_placeholder: 'seuil d\'échec',
     },
     error: {
       text: 'Une erreur est subvenue. La page que vous cherchez n\'a pas pu être trouvée.',

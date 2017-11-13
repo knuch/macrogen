@@ -2,7 +2,73 @@ textarea {
   min-height: 100px;
 }
 
-.textarea-zone {
+.preview .card {
+  border: 1px solid #702181;
+  border-radius: 0;
+  font-size: 150%;
+}
+
+.preview .card .card-header{
+  background-color: #702181;
+  border-radius: 0;
+  border: none;
+  color: white;
+  text-align: center;
+  min-height: 1.5rem;
+}
+
+.preview .list-group-item {
+  font-weight: bold;
   position: relative;
-  height: 100px;
+  border: none;
+}
+
+.preview .macro-line:hover {
+  cursor: pointer;
+}
+
+.preview .btn-preview-delete {
+  position: absolute;
+  top: 0.33rem;
+  right: 0.2rem;
+  padding: 0;
+  z-index:9999;
+}
+.preview .btn-preview-delete .fa{
+  padding: 0.5rem 0.6rem;
+}
+
+.macro-line {
+  min-height: 2.8rem;
+}
+
+.preview .macro-line:hover, .preview .macro-line.active{
+  background: #7021815c !important;
+  color: black;
+}
+
+.preview .list-group-item:hover:after {
+  display: block;
+}
+
+.preview .list-group > .list-group-item:nth-child(even) {
+  background: #efefef;
+  border-color:#efefef;
+}
+
+.btn-dashed {
+  border-style: dashed;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.preview .roll {
+  background: #ffe50287;
+  padding: 0.17rem;
+}
+
+.preview input:focus {
+  outline: none;
 }
