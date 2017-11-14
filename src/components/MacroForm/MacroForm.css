@@ -43,7 +43,7 @@ textarea {
 }
 
 .preview .macro-line:hover, .preview .macro-line.active{
-  background: #7021815c !important;
+  background: #ebd4ff !important;
   color: black;
 }
 
@@ -65,10 +65,26 @@ textarea {
 }
 
 .preview .roll {
-  background: #ffe50287;
-  padding: 0.17rem;
+  background: #fff173;
+  padding: 0.0rem 0.2rem;
+  line-height: 1.9rem;
+  display: inline-block;
 }
 
 .preview input:focus {
   outline: none;
+}
+
+.btn-primary {
+  background: #702181;
+  border-color: #702181;
+}
+
+.btn-primary:hover {
+  border-color: #89399a;
+  background: #89399a;
+}
+
+.btn-primary:focus {
+  box-shadow: 0 0 0 0.2rem rgba(112, 33, 128, 0.26);
 }

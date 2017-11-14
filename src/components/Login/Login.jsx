@@ -96,7 +96,7 @@ class Login extends Component {
                 <button className="btn-block btn btn-danger" onClick={() => app.handleLogout()}>{s.login.logout}</button>
               </div>
               <div className="card p-4 mt-4">
-                <Link to='/generator' className="btn btn-success btn-lg"><FontAwesome name="arrow-circle-right"/>   {s.login.go_to_generator}</Link>
+                <Link to='/my-macros' className="btn btn-success btn-lg"><FontAwesome name="arrow-circle-right"/>   {s.login.go_to_generator}</Link>
               </div>
             </div>
             :

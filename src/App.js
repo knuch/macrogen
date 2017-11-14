@@ -3,6 +3,7 @@ import './App.css';
 import Header from './components/Header';
 import { Router, Route, Switch } from 'react-router-dom';
 import MacroForm from './components/MacroForm';
+import MyMacros from './components/MyMacros';
 import Login from './components/Login';
 import { observer, inject } from 'mobx-react';
 import About from './components/About';
@@ -30,6 +31,8 @@ class App extends Component {
                   </div>
                 :
                 <Switch>
+                  <Route exact path='/my-macros' component={MyMacros}/>
+                  <Route exact path='/my-macros/:group/:macro' component={MacroForm}/>
                   <Route exact path='/generator' component={MacroForm}/>
                   <Route exact path='/about' component={About}/>
                   <Route exact path='/' component={Login}/>

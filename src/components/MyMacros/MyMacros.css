@@ -1,0 +1,43 @@
+.bg-purple {
+  background-color: #702181;
+}
+
+.border-dashed {
+  border-style: dashed;
+}
+
+.macro {
+  position: relative;
+}
+
+.macro .btn {
+  border-radius: none;
+  color: white;
+  transition: transform 0.3s ease;
+}
+.macro .btn-delete {
+  position: absolute;
+  top: 0;
+  right: 1rem;
+}
+.macro .btn-delete:hover {
+  color: red;
+  font-swight: bold;
+  transform:scale(1.2);
+}
+
+.macro .btn-edit {
+  position: absolute;
+  top: 0;
+  right: 2.9rem;
+}
+
+.macro .btn-edit:hover {
+  color: orange;
+  transform:scale(1.2);
+}
+
+.macro input:focus {
+  color: white;
+  background: #702181;
+}

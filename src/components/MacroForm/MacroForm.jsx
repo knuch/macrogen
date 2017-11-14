@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import FontAwesome from 'react-fontawesome';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { observe } from 'mobx';
+import { observe, extendObservable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import RollGroup from '../RollGroup';
 import FormEntry from '../FormEntry';
 import { Link } from 'react-router-dom';
+import LoggedOutAlert from './LoggedOutAlert.jsx';
 import './MacroForm.css';
 
 class MacroForm extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       macroCopied: false,
       selectedRow: false,
@@ -18,35 +19,39 @@ class MacroForm extends Component {
   }
 
   componentWillMount() {
+    // recover ids from the url and load corresponding macro and group
+    const { macro, group } = this.props.match.params;
+    this.props.app.setCurrentGroup(group);
+    this.props.app.setCurrentMacro(group, macro);
+
     // reset state of macrocopied when something is changed in the macro
     // test not to reset when macroCopied is already false
     observe(this.props.app.macro, () => {
       if(this.state.macroCopied) {
         this.setState({macroCopied: false})
-      } });
-    }
+      }
+    });
 
-    selectRow(group) {
-      this.setState({
-        selectedRow: group
-      })
-    }
+    // if(!app.currentRow.entries) extendObservable(app.currentRow, {entries: []});
+  }
 
-    render() {
-      const { app, s } = this.props;
-      return (
-        <div className="container-fluid">
-          <div className="row h-100">
-            {
-              app.loggedin ? null :
-              <div className="col-12">
-                <div className="alert alert-warning alert-dismissible fade show mb-4" role="alert"><FontAwesome name="user-times fa-lg"/> {s.generator.logged_out} <Link to="/" className="btn btn-info"><FontAwesome name="sign-in" /> {s.generator.connect}</Link>
-                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            </div>
-          }
+  selectRow(row) {
+    this.setState({
+      selectedRow: row
+    })
+  }
+
+  render() {
+    const { app, s } = this.props;
+    const currentGroup = app.currentGroup;
+    const currentMacro = app.currentMacro;
+    const currentRow = app.currentRow;
+    return (
+      <div className="content container-fluid p-4">
+        <div className="row">
+          <div className="col-12">
+            { app.loggedin ? null : <LoggedOutAlert s={s} /> }
+          </div>
           <div className="textarea-zone col-md-6">
             <div className="card mb-4">
               <h3 className="card-header">{s.form.parameters}</h3>
@@ -63,20 +68,20 @@ class MacroForm extends Component {
                 </div>
               </div>
             </div>
-            <div className="preview text-left mb-4">
+            <div className="preview text-left mb-5">
               <div className="card">
                 <input type="text" className="card-header py-1" value={app.name} onChange={e => app.setName(e)} />
                 <ul className="list-group list-group-flush">
-                  { app.groups.map(group => {
-                    const classes = this.state.selectedRow.id === group.id
+                  { currentMacro.rows.map(row => {
+                    const classes = this.state.selectedRow.id === row.id
                     ? 'list-group-item macro-line py-1 pr-5 active'
                     : 'list-group-item macro-line py-1 pr-5';
                     return (
-                      <li className={classes} onClick={() => this.selectRow(group)} key={`preview-group-${group.id}`}>
+                      <li className={classes} onClick={() => this.selectRow(row)} key={`preview-row-${row.id}`}>
                         {
-                          group.entries
+                          row.entries
                           ?
-                          group.entries.map(e => {
+                          row.entries.map(e => {
                             switch(e.type) {
                               case 'text':
                               return e.args.value+' ';
@@ -90,13 +95,13 @@ class MacroForm extends Component {
                           })
                           : s.generator.empty }
                           <span className="btn btn-danger btn-preview-delete">
-                            <FontAwesome name="trash" onClick={(e) => {e.stopPropagation();alert('delete')}}/>
+                            <FontAwesome name="trash" onClick={(e) => app.deleteRow(row, currentGroup.id, currentMacro.id)}/>
                           </span>
                         </li>
                       );
                     }) }
                     <li className="list-group-item">
-                      <button onClick={() => app.addGroup()} className="btn btn-primary btn-block"><FontAwesome name="plus" /> {s.form.addLine}</button>
+                      <button onClick={() => app.addRow(currentGroup.id, currentMacro.id)} className="btn btn-primary btn-block"><FontAwesome name="plus" /> {s.form.addLine}</button>
                     </li>
                   </ul>
                 </div>
@@ -155,27 +160,18 @@ class MacroForm extends Component {
                     <div className="card mb-2">
                       <div className="card-body">
                         <div className="text-muted">
-                          <h2>Aucune ligne sélectionnée</h2>
-                          <p>Sélectionnez une ligne dans la colonne de gauche pour éditer ses détails</p>
+                          <h2>{s.form.no_line_selected}</h2>
+                          <p>{s.form.no_line_detail}</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 }
               </div>
-              {/* <div className="col-md-6 text-left d-none">
-              <div className="controls row">
-
-              <button onClick={() => app.addGroup()} className="btn btn-success">Add a group</button>
             </div>
-            <div className="groups mt-4 d-flex flex-direction-column flex-wrap">
-            {app.groups.map(group => <RollGroup key={`group-${group.id}`} args={group.args} group={group} app={app} />)}
           </div>
-        </div> */}
-      </div>
-    </div>
-  );
-}
-}
+        );
+      }
+    }
 
-export default inject('app', 's')(observer(MacroForm));
+    export default inject('app', 's')(observer(MacroForm));

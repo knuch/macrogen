@@ -16,7 +16,7 @@ let trans = new LocalizedStrings({
       submit: 'Connexion',
       register: 'Me créer un compte',
       google: 'Se connecter avec google',
-      go_to_generator: 'Afficher le générateur',
+      go_to_generator: 'Mes macros',
       loggedin_as: 'Connecté en tant que',
       logout: 'Déconnexion'
     },
@@ -31,7 +31,8 @@ let trans = new LocalizedStrings({
       about: 'À propos',
       donate: 'Faire un don!',
       generator: 'Generateur',
-      home: 'Accueil'
+      home: 'Accueil',
+      my_macros: 'Mes macros'
     },
     generator: {
       logged_out: 'Vous êtes déconnecté. Pour sauvegarder vos macro, veuillez vous',
@@ -61,6 +62,11 @@ let trans = new LocalizedStrings({
       cs_placeholder: 'seuil de critique',
       cf: 'Fumble',
       cf_placeholder: 'seuil d\'échec',
+      no_line_selected: 'Aucune ligne sélectionnée',
+      no_line_detail: 'Sélectionnez une ligne dans la colonne de gauche pour éditer ses détails',
+      my_macros: 'Macros',
+      my_macro: 'Ma macro',
+      add_macro: 'Ajouter une macro',
     },
     error: {
       text: 'Une erreur est subvenue. La page que vous cherchez n\'a pas pu être trouvée.',
