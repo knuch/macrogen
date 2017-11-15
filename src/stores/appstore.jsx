@@ -155,7 +155,8 @@ export default class AppStore {
     this.addGroup = action(() => {
       const group = {
         id: new Date().valueOf(),
-        macros: observable([])
+        macros: observable([]),
+        title: 'Group title'
       }
       this.groups.push(group);
     });

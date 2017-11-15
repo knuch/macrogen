@@ -45,3 +45,23 @@
   color: white;
   background: #702181;
 }
+
+.groups-container .macro-group:nth-child(5n+2) .bg-purple
+{
+  background: #6DA34D !important;
+}
+
+.groups-container .macro-group:nth-child(5n+3) .bg-purple
+{
+  background: #DB5461 !important;
+}
+
+.groups-container .macro-group:nth-child(5n+4) .bg-purple
+{
+  background: #4D5382 !important;
+}
+
+.groups-container .macro-group:nth-child(5n+5) .bg-purple
+{
+  background: #EF8839 !important;
+}

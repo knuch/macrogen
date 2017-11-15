@@ -42,6 +42,7 @@ let trans = new LocalizedStrings({
       empty: 'Vide'
     },
     form: {
+      add_group: 'Ajouter un groupe de macros',
       template: 'Template de votre macro',
       title: 'Titre de la macro',
       parameters: 'Paramètre généraux',

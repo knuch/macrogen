@@ -25,20 +25,29 @@ class MyMacros extends Component {
   render() {
     const { s, app } = this.props;
     return (
-      <div className="container">
+      <div className="container groups-container">
         { app.groups.map(group =>
-          <div className="macro-group" key={group.id}>
+          <div className="macro-group mb-5" key={group.id}>
             <nav className="navbar navbar-light bg-purple">
               <span className="navbar-brand mb-0 h1 text-white">{group.title}</span>
             </nav>
             <div className="row macros-container mt-3">
-              { group.macros.map(macro => this.renderMacro(macro, group))}
+              { group.macros
+                ?
+                group.macros.map(macro => this.renderMacro(macro, group))
+                : null }
               <div className="col-4">
                 <button onClick={() => app.addMacro(group.id)} className="btn btn-lg btn-outline-secondary border-dashed d-block w-100 mb-3"><FontAwesome name="plus-circle" /> {s.form.add_macro}</button>
               </div>
             </div>
           </div>
         ) }
+        <div className="row pb-5">
+          <div className="col-12">
+            <hr className="mt-2 mb-4"/>
+            <button onClick={() => app.addGroup()} className="btn btn-outline-success btn-dashed btn-lg"><FontAwesome name="plus-circle" />  {s.form.add_group}</button>
+          </div>
+        </div>
 
       </div>
     );
