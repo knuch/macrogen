@@ -1,4 +1,4 @@
-import {extendObservable, action, computed, autorun, observable, toJS} from 'mobx';
+import {extendObservable, action, computed, autorun, observable, toJS, isObservable, whyRun} from 'mobx';
 import firebase from 'firebase';
 
 export default class AppStore {
@@ -37,10 +37,10 @@ export default class AppStore {
         this.user = user;
         this.fb.userRef.once('value').then( snap => {
           const baseGroup =[{
-                        id: new Date().valueOf(),
-                        title: this.s.form.my_macros,
-                        macros: []
-                      },];
+            id: new Date().valueOf(),
+            title: this.s.form.my_macros,
+            macros: []
+          },];
           this.groups = snap.child('groups').val() || baseGroup;
           this.loggedin = true;
           this.setLoading(false);
@@ -118,22 +118,35 @@ export default class AppStore {
     // ---------------------------- setcurrent -----------------------
 
     this.setCurrentGroup = action(groupId => {
-      this.currentGroup = this.findGroup(groupId);
+      if (this.loggedin) {
+        const group = this.findGroup(groupId);
+        // dynamic observableArray declaration
+        // As empty arrays are not persisted to firebase
+        if (group && !group.macros) extendObservable(group, {macros: []});
+        this.currentGroup = group;
+      } else {
+        this.currentGroup = this.groups[0];
+      }
     });
 
     this.setCurrentMacro = action((groupId ,macroId) => {
-      const macro = this.findMacro(groupId, macroId);
-      // dynamic observableArray declaration
-      // As empty arrays are not persisted to firebase
-      if (!macro.rows) extendObservable(macro, {rows: []});
-      this.currentMacro = macro;
+      if (this.loggedin) {
+        const macro = this.findMacro(groupId, macroId);
+        // dynamic observableArray declaration
+        // As empty arrays are not persisted to firebase
+        if (!macro.rows) extendObservable(macro, {rows: []});
+        this.currentMacro = macro;
+      } else {
+        this.addMacro(this.currentGroup.id);
+        this.currentMacro = this.currentGroup.macros[0]
+      }
     });
 
     this.setCurrentRow = action(rowId => {
-      const row = this.findRow(rowId);
+      const row = this.findRow(this.currentGroup.id, this.currentMacro.id, rowId);
       // dynamic observableArray declaration
       // As empty arrays are not persisted to firebase
-      if (!row.entries) extendObservable(row, {entries: []});
+      if (row && !row.entries) extendObservable(row, {entries: []});
       this.currentRow = row;
     });
 
@@ -149,10 +162,10 @@ export default class AppStore {
 
     this.addMacro = action((groupId) => {
       const group = this.findGroup(groupId);
-      console.log(group);
       const macro = {
         id: new Date().valueOf(),
         title: this.s.form.my_macro,
+        template: 'default',
         rows: observable([])
       }
       group.macros.push(macro);
@@ -167,10 +180,13 @@ export default class AppStore {
       macro.rows.push(row);
     });
 
-    this.addEntry = action((entryType, groupId, macroId, rowId) => {
+    this.addEntry = action((type) => {
+      const groupId = this.currentGroup.id;
+      const macroId = this.currentMacro.id;
+      const rowId = this.currentRow.id;
       const row = this.findRow(groupId, macroId, rowId);
       const id = new Date().valueOf();
-      switch(entryType) {
+      switch(type) {
         case 'text':
         row.entries.push(observable({
           id: id,
@@ -203,28 +219,32 @@ export default class AppStore {
 
     this.deleteMacro = action((macro, groupId) => {
       const group = this.findGroup(groupId);
+      if(this.currentMacro && macro.id === this.currentMacro.id) this.setCurrentMacro(false);
       group.macros.remove(macro);
     });
 
     this.deleteRow = action((row, groupId, macroId) => {
       const macro = this.findMacro(groupId, macroId);
+      if(this.currentRow && row.id === this.currentRow.id) this.setCurrentRow(false);
       macro.rows.remove(row);
     });
 
-    this.deleteEntry = action((entry, groupId, macroID, rowId) => {
-      const row = this.findRow(groupId, macroID, rowId);
-      row.entries.remove(entry);
-    });
-
-    this.setEntryArg = action((e, groupId, entryId, arg) => {
-      const currentEntry = this.findEntry(groupId, entryId);
-      currentEntry.args[arg] = e.target.value;
+    this.deleteEntry = action((entry) => {
+      this.currentRow.entries.remove(entry);
     });
 
     // ---------------------------- Getters and Setters -----------------------
 
     this.setItemTitle = action((item, text) => {
       item.title = text;
+    });
+
+    this.setArg = action((object, value, key) => {
+      object[key] = value;
+    });
+
+    this.setEntryArg = action('setEntryArg', (object, value, key) => {
+      object['args'][key] = value;
     });
 
     // ---------------------------- Alerts -----------------------
@@ -264,14 +284,16 @@ export default class AppStore {
 
     // ---------------------------- Computed Macro -----------------------
 
-    this.macro = computed (() => {
-      const macroHead = `&{template:${this.template}}{{name=${this.name}}}`;
-      const macroBody = this.currentMacro.rows.map(g => {
-        const entriesValues = g.entries
+    this.macro = observable(computed (() => {
+      const m = this.currentMacro;
+      if (!m) return false;
+      const macroHead = `&{template:${m.template}}{{name=${m.title}}}`;
+      const macroBody = m.rows.map(row => {
+        const entriesValues = row.entries
         ?
-        g.entries.map(e => {
-          const a = e.args;
-          switch(e.type) {
+        row.entries.map(entry => {
+          const a = entry.args;
+          switch(entry.type) {
             case 'text':
             return a.value;
             break;
@@ -291,11 +313,12 @@ export default class AppStore {
         const fullMacro = macroHead+macroBody.reduce((acc, current) => acc+current)
         return fullMacro;
       }
-    });
+    }));
 
     // ---------------------------- Auto save -----------------------
 
     autorun(() => {
+      const trigger = toJS(this.currentMacro)+toJS(this.currentGroup)+toJS(this.currentRow);
       this.loggedin ? this.fb.saveGroups(toJS(this.groups)) : null;
     });
   }

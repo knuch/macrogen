@@ -17,7 +17,7 @@
 }
 .macro .btn-delete {
   position: absolute;
-  top: 0;
+  top: 0.25rem;
   right: 1rem;
 }
 .macro .btn-delete:hover {
@@ -28,13 +28,17 @@
 
 .macro .btn-edit {
   position: absolute;
-  top: 0;
+  top: 0.25rem;
   right: 2.9rem;
 }
 
 .macro .btn-edit:hover {
   color: orange;
   transform:scale(1.2);
+}
+
+.macro input {
+  line-height: 2rem;
 }
 
 .macro input:focus {

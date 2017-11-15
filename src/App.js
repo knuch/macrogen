@@ -10,6 +10,7 @@ import About from './components/About';
 import NotFound from './components/NotFound'
 import AlertManager from './components/AlertManager'
 import FontAwesome from 'react-fontawesome';
+import DevTools from 'mobx-react-devtools'
 
 class App extends Component {
   render() {
@@ -17,6 +18,7 @@ class App extends Component {
     return (
         <Router history={history}>
           <div className="app">
+            <DevTools />
             <Header />
             <AlertManager />
             <div className="container-fluid pt-4">

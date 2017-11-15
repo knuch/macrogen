@@ -8,6 +8,10 @@ textarea {
   font-size: 150%;
 }
 
+.p-relative {
+  position: relative;
+}
+
 .preview .card .card-header{
   background-color: #702181;
   border-radius: 0;
@@ -87,4 +91,18 @@ textarea {
 
 .btn-primary:focus {
   box-shadow: 0 0 0 0.2rem rgba(112, 33, 128, 0.26);
+}
+
+.edit-label {
+  position: absolute;
+  top: 0.1rem;
+  right: 0.7rem;
+}
+
+.navbar-light {
+  justify-content: flex-start;
+}
+
+.navbar-light a:hover {
+  text-decoration: underline;
 }
