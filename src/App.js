@@ -11,6 +11,7 @@ import NotFound from './components/NotFound'
 import AlertManager from './components/AlertManager'
 import FontAwesome from 'react-fontawesome';
 import DevTools from 'mobx-react-devtools'
+import Example from './components/Example/'
 
 class App extends Component {
   render() {
@@ -37,6 +38,7 @@ class App extends Component {
                   <Route exact path='/my-macros/:group/:macro' component={MacroForm}/>
                   <Route exact path='/generator' component={MacroForm}/>
                   <Route exact path='/about' component={About}/>
+                  <Route exact path='/example' component={Example}/>
                   <Route exact path='/' component={Login}/>
                   <Route path='/' component={NotFound}/>
                 </Switch>

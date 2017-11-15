@@ -22,6 +22,7 @@ class Header extends Component {
               ? <li><NavLink exact className="nav-link" to='/my-macros' activeClassName="active">{s.menu.my_macros}</NavLink></li>
               : <li><NavLink exact className="nav-link" to='/generator' activeClassName="active">{s.menu.generator}</NavLink></li>
             }
+            <NavLink exact className="nav-link" to='/example' activeClassName="active">{s.menu.examples}</NavLink>
           </ul>
           <span className="navbar-text">
               <a href="https://github.com/knuch/macrogen" target="_blank" rel="noopener noreferrer" className="github btn btn-secondary mr-2"><FontAwesome name="github" /></a>

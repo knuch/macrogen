@@ -7,6 +7,9 @@ let trans = new LocalizedStrings({
     alert: {
       success_login: 'Connexion réussie. Bienvenue'
     },
+    examples: {
+      copied: 'Macro copied'
+    },
     login: {
       title: 'Login',
       username: 'Nom d\'utilisateur',
@@ -32,7 +35,8 @@ let trans = new LocalizedStrings({
       donate: 'Faire un don!',
       generator: 'Generateur',
       home: 'Accueil',
-      my_macros: 'Mes macros'
+      my_macros: 'Mes macros',
+      examples: 'Exemples',
     },
     generator: {
       logged_out: 'Vous êtes déconnecté. Pour sauvegarder vos macro, veuillez vous',

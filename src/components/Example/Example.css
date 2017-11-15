@@ -1,0 +1,21 @@
+.clickable,
+.clickable .card-body {
+  transition: 0.3s ease;
+  position: relative;
+}
+.clickable:hover {
+  cursor: pointer;
+  transform: scale(1.04);
+}
+
+.clickable:hover .card-body {
+  border: 1px solid purple;
+}
+
+.clickable .alert {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: calc(100% - 20px);
+  z-index: 99999;
+}
