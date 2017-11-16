@@ -10,9 +10,10 @@ export default class Firebase {
     this.googleAuth = new firebase.auth.GoogleAuthProvider();
   }
 
-  setUserDatabase(uid) {
+  setUserDatabase(user) {
     return new Promise((resolve) => {
-      const userRef = this.ref.child('users').child(uid);
+      this.ref.child('users').child(user.uid).child('email').set(user.email);
+      const userRef = this.ref.child('users').child(user.uid);
       userRef.once('value', snap => {
         if (snap.exists()) {
           this.userRef = userRef;

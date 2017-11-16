@@ -32,19 +32,24 @@ export default class AppStore {
     // ---------------------------- Login and register -----------------------
 
     this.successLogin = action((user, redirect = true, showAlert = true) => {
-      const uid = user.uid;
-      this.fb.setUserDatabase(uid).then(() => {
+      this.fb.setUserDatabase(user).then(() => {
         this.user = user;
         this.fb.userRef.once('value').then( snap => {
-          const baseGroup =[{
+          const baseGroup =observable([{
             id: new Date().valueOf(),
             title: this.s.form.my_macros,
             macros: []
-          },];
+          },]);
           this.groups = snap.child('groups').val() || baseGroup;
+
+          //initialise empty arrays
+          this.groups.map(group => {
+            if (group && !group.macros) extendObservable(group, {macros: []});
+          });
+          console.log(this.groups);
           this.loggedin = true;
           this.setLoading(false);
-          if (redirect) this.history.push('/generator');
+          if (redirect) this.history.push('/my-macros');
           if (showAlert) this.addSuccess(`${this.s.alert.success_login} ${this.user.email}`, 'check');
         });
       });
@@ -178,6 +183,7 @@ export default class AppStore {
         id: new Date().valueOf(),
         entries: observable([])
       }
+      if (macro && !macro.rows) extendObservable(macro, {rows: []});
       macro.rows.push(row);
     });
 
@@ -220,7 +226,6 @@ export default class AppStore {
 
     this.deleteMacro = action((macro, groupId) => {
       const group = this.findGroup(groupId);
-      if(this.currentMacro && macro.id === this.currentMacro.id) this.setCurrentMacro(false);
       group.macros.remove(macro);
     });
 
